@@ -1,0 +1,305 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>رقصي ليا يا أسية</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Lalezar&display=swap">
+<style>
+/* Layout: one emergency screen. Left, a zellige stage where Assia dances. Right, the life meter and the dance button. */
+:root {
+  --bg: #edf0fb;
+  --fg: #0f1740;
+  --muted: #4a5489;
+  --accent: #2338c9;
+  --rose: #d8296b;
+  --on-rose: #ffffff;
+  --saffron: #e59a00;
+  --panel: #ffffff;
+  --line: #c9d0f0;
+  --track: #d5dbf5;
+  --z1: #2338c9;
+  --z2: #3149dc;
+  --floor: rgba(8, 14, 70, 0.45);
+  --skin: #c98a62;
+  --hair: #1b1420;
+  --font-display: 'Lalezar', 'Cairo', system-ui, sans-serif;
+  --font-body: 'Cairo', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0a0f2e; --fg: #eceeff; --muted: #a3acdf; --accent: #8a9bff;
+    --rose: #ff5c96; --on-rose: #2a0716; --saffron: #ffc233; --panel: #131a45;
+    --line: #2a3478; --track: #1d2757; --z1: #16217a; --z2: #1d2c9a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0a0f2e; --fg: #eceeff; --muted: #a3acdf; --accent: #8a9bff;
+  --rose: #ff5c96; --on-rose: #2a0716; --saffron: #ffc233; --panel: #131a45;
+  --line: #2a3478; --track: #1d2757; --z1: #16217a; --z2: #1d2c9a;
+  color-scheme: dark;
+}
+
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 17px; line-height: 1.7; padding-inline: 16px; padding-block: 24px 40px; }
+* { box-sizing: border-box; }
+.wrap { max-width: 1040px; margin-inline: auto; display: flex; flex-direction: column; gap: 32px; }
+
+.eyebrow { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; color: var(--rose); letter-spacing: 0; }
+.eyebrow i { width: 10px; height: 10px; border-radius: 50%; background: var(--rose); animation: blink 1s steps(2) infinite; }
+@keyframes blink { 50% { opacity: .15; } }
+h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.5rem, 7.5vw, 4.8rem); line-height: 1.2; margin: 6px 0 12px; text-wrap: balance; }
+h1 em { font-style: normal; color: var(--rose); }
+.lede { max-width: 38em; color: var(--muted); font-size: 1.1rem; margin: 0; }
+
+.grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 760px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* stage */
+.stage { position: relative; aspect-ratio: 4 / 4.6; max-width: 100%; overflow: hidden; border-radius: 4px; border: 2px solid var(--line);
+  background: repeating-conic-gradient(var(--z1) 0 25%, var(--z2) 0 50%) 0 0 / 44px 44px; transition: filter .6s; }
+.stage::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 75%, rgba(255,255,255,.35), transparent 60%); }
+.stage::after { content: ""; position: absolute; inset: 0; background: var(--rose); opacity: 0; mix-blend-mode: soft-light; pointer-events: none; }
+.stage.on::after { animation: beat .52s ease-in-out infinite alternate; }
+@keyframes beat { to { opacity: .55; } }
+.stage.gone { filter: grayscale(.85) brightness(.8); }
+.floor { position: absolute; inset-inline: 0; bottom: 0; height: 24%; background: var(--floor); }
+.tag { position: absolute; top: 12px; inset-inline-start: 12px; z-index: 3; background: var(--panel); color: var(--fg); font-weight: 700; font-size: .9rem; padding: 2px 12px; border-radius: 2px; }
+svg.girl { position: absolute; bottom: 2%; left: 50%; width: 62%; transform: translateX(-50%); z-index: 2; overflow: visible; }
+svg.girl * { animation-play-state: paused; }
+.stage.on svg.girl * { animation-play-state: running; }
+.skin { fill: var(--skin); } .skinline { stroke: var(--skin); }
+.dress { fill: var(--rose); } .trim { stroke: var(--saffron); fill: none; }
+.hair { fill: var(--hair); }
+#fig { transform-origin: 100px 320px; animation: sway .52s ease-in-out infinite alternate; }
+@keyframes sway { from { transform: translateY(0) rotate(-3deg); } to { transform: translateY(-7px) rotate(3deg); } }
+#armL { transform-origin: 84px 118px; animation: armL .52s ease-in-out infinite alternate; }
+#armR { transform-origin: 116px 118px; animation: armR .52s ease-in-out infinite alternate; }
+@keyframes armL { from { transform: rotate(15deg); } to { transform: rotate(145deg); } }
+@keyframes armR { from { transform: rotate(-145deg); } to { transform: rotate(-15deg); } }
+#legL { animation: legL .52s ease-in-out infinite alternate; }
+#legR { animation: legR .52s ease-in-out infinite alternate; }
+@keyframes legL { from { transform: translateY(0); } to { transform: translateY(-10px); } }
+@keyframes legR { from { transform: translateY(-10px); } to { transform: translateY(0); } }
+#head { transform-origin: 100px 104px; animation: nod .52s ease-in-out infinite alternate; }
+@keyframes nod { from { transform: rotate(-7deg); } to { transform: rotate(7deg); } }
+#backhair { transform-origin: 100px 80px; animation: hairswing .52s ease-in-out infinite alternate-reverse; }
+@keyframes hairswing { from { transform: rotate(-6deg); } to { transform: rotate(6deg); } }
+
+.heart { position: absolute; z-index: 4; width: 26px; height: 26px; fill: var(--rose); pointer-events: none; animation: rise 2s ease-out forwards; }
+@keyframes rise { from { transform: translateY(0) scale(.6); opacity: 1; } to { transform: translateY(-190px) scale(1.2); opacity: 0; } }
+
+/* control panel */
+.panel { background: var(--panel); border: 2px solid var(--line); border-radius: 4px; padding: 22px; display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.label { font-weight: 700; color: var(--muted); }
+.big { font-family: var(--font-display); font-size: clamp(4rem, 14vw, 6.5rem); line-height: 1; font-variant-numeric: tabular-nums; direction: ltr; text-align: start; }
+.big small { font-size: .35em; color: var(--muted); margin-inline-start: 4px; }
+.bar { height: 22px; background: var(--track); border-radius: 2px; overflow: hidden; direction: ltr; }
+.fill { height: 100%; width: 100%; background: linear-gradient(90deg, var(--saffron), var(--rose)); transition: width .45s linear; }
+.low .fill { animation: blink .6s steps(2) infinite; }
+.status { min-height: 3.4em; margin: 0; font-weight: 600; font-size: 1.1rem; text-wrap: balance; }
+.btn { font: inherit; font-weight: 700; font-size: 1.35rem; background: var(--rose); color: var(--on-rose); border: 0; border-radius: 3px; padding: 14px 20px; cursor: pointer; width: 100%; }
+.btn:hover { filter: brightness(1.08); }
+.btn:focus-visible, .ghost:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.btn.pulse { animation: pulse 1s ease-in-out infinite alternate; }
+@keyframes pulse { to { transform: scale(1.03); } }
+.prog { display: flex; align-items: center; gap: 12px; }
+.prog .bar { flex: 1; height: 10px; }
+.prog .fill { background: var(--accent); }
+.prog span { font-variant-numeric: tabular-nums; direction: ltr; font-weight: 700; }
+.row { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.mute { display: inline-flex; gap: 8px; align-items: center; color: var(--muted); font-size: .95rem; cursor: pointer; }
+.win { border: 2px solid var(--saffron); border-radius: 4px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.win h2 { font-family: var(--font-display); font-weight: 400; font-size: 2rem; line-height: 1.2; margin: 0; color: var(--saffron); }
+.win p { margin: 0; }
+.ghost { font: inherit; background: none; border: 2px solid var(--line); color: var(--fg); padding: 6px 14px; border-radius: 3px; cursor: pointer; align-self: flex-start; }
+
+/* rules */
+.rules h2 { font-family: var(--font-display); font-weight: 400; font-size: 2rem; margin: 0 0 10px; }
+.rules ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 28px; }
+@media (max-width: 760px) { .rules ul { grid-template-columns: minmax(0, 1fr); } }
+.rules li { display: flex; gap: 12px; align-items: flex-start; border-top: 2px solid var(--line); padding-top: 10px; }
+.rules input { margin-top: 9px; width: 18px; height: 18px; accent-color: var(--rose); flex: none; }
+.rules label { cursor: pointer; }
+footer { color: var(--muted); border-top: 2px solid var(--line); padding-top: 14px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+
+<main class="wrap" dir="rtl" lang="ar-MA">
+  <header>
+    <span class="eyebrow"><i></i>حالة طارئة</span>
+    <h1>أسية، رقصي ليا <em>ولا غادي نموت.</em></h1>
+    <p class="lede">هادي ماشي نكتة. شوفي العداد ديال الروح ديالي كيهبط ثانية بثانية. الدواء الوحيد هو رقصة ديالك. بدلة، كاس، حتى شي حاجة ماكاينة. غير رقصي.</p>
+  </header>
+
+  <section class="grid">
+    <div class="stage" id="stage" aria-label="المسرح">
+      <div class="tag" id="tag">المسرح خاوي، كيتسنى أسية</div>
+      <div class="floor"></div>
+      <svg class="girl" viewBox="0 0 200 340" aria-hidden="true">
+        <ellipse cx="100" cy="324" rx="54" ry="8" fill="rgba(0,0,0,.35)"/>
+        <g id="fig">
+          <g id="legL"><line class="skinline" x1="92" y1="215" x2="88" y2="310" stroke-width="10" stroke-linecap="round"/><ellipse cx="86" cy="314" rx="12" ry="6" class="hair"/></g>
+          <g id="legR"><line class="skinline" x1="108" y1="215" x2="112" y2="310" stroke-width="10" stroke-linecap="round"/><ellipse cx="114" cy="314" rx="12" ry="6" class="hair"/></g>
+          <g id="backhair"><path class="hair" d="M76 80 Q58 150 86 172 L114 172 Q142 150 124 80 Z"/></g>
+          <rect class="skin" x="95" y="98" width="10" height="20"/>
+          <path class="dress" d="M84 112 L116 112 L144 240 Q100 256 56 240 Z"/>
+          <path class="trim" d="M56 240 Q100 256 144 240" stroke-width="6" stroke-linecap="round"/>
+          <path class="trim" d="M88 150 L112 150" stroke-width="6" stroke-linecap="round"/>
+          <g id="armL"><line class="skinline" x1="84" y1="118" x2="76" y2="178" stroke-width="9" stroke-linecap="round"/><circle class="skin" cx="75" cy="182" r="7"/></g>
+          <g id="armR"><line class="skinline" x1="116" y1="118" x2="124" y2="178" stroke-width="9" stroke-linecap="round"/><circle class="skin" cx="125" cy="182" r="7"/></g>
+          <g id="head">
+            <circle class="skin" cx="100" cy="84" r="21"/>
+            <path class="hair" d="M78 86 Q74 54 100 56 Q126 54 122 86 Q120 68 100 68 Q80 68 78 86 Z"/>
+            <circle class="hair" cx="92" cy="86" r="2.4"/><circle class="hair" cx="108" cy="86" r="2.4"/>
+            <path d="M93 94 Q100 101 107 94" stroke="var(--hair)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <div class="panel" id="panel">
+      <div>
+        <div class="label">الروح ديالي</div>
+        <div class="big"><span id="pct">100</span><small>%</small></div>
+      </div>
+      <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" id="lifebar"><div class="fill" id="fill"></div></div>
+      <p class="status" id="status" aria-live="polite">لاباس عليا. بقيت كنتنفس.</p>
+      <button class="btn pulse" id="dance" type="button" aria-pressed="false">رقصي دابا</button>
+      <div class="prog"><span class="label">ثواني الرقص</span><div class="bar"><div class="fill" id="pfill" style="width:0%"></div></div><span id="secs">0 / 30</span></div>
+      <div class="row">
+        <label class="mute" for="mute"><input type="checkbox" id="mute"> بلا ميزيكا</label>
+      </div>
+      <div class="win" id="win" hidden>
+        <h2>تعاودات الحياة</h2>
+        <p>الحمد لله، رجعتي ليا الروح. الرقصة تقبلات والشهادة صالحة مدى الحياة. كنبغيك أسية.</p>
+        <button class="ghost" id="again" type="button">بغيتها مرة أخرى</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="rules">
+    <h2>شروط الرقصة</h2>
+    <ul>
+      <li><input type="checkbox" id="r1"><label for="r1">30 ثانية على الأقل. أقل من هاكا ماكتحسبش.</label></li>
+      <li><input type="checkbox" id="r2"><label for="r2">الكتاف خاصهم يتحركو. هادي شرط ماكاينش فيه نقاش.</label></li>
+      <li><input type="checkbox" id="r3"><label for="r3">ممنوع الضحك قبل نهاية الرقصة. إيلا ضحكتي كتعاودي.</label></li>
+      <li><input type="checkbox" id="r4"><label for="r4">أنا المشاهد الوحيد. ما كاين لا تصوير لا والو.</label></li>
+    </ul>
+  </section>
+
+  <footer>كتبتها بالحب وشوية د الخوف. ديالك، اللي كيموت عليك.</footer>
+</main>
+
+<script>
+(function () {
+  var GOAL = 30;
+  var life = 100, secs = 0, dancing = false, done = false;
+  var $ = function (id) { return document.getElementById(id); };
+  var stage = $('stage'), tag = $('tag'), btn = $('dance'), panel = $('panel');
+  var steps = [
+    [90, 'لاباس عليا. بقيت كنتنفس.'],
+    [70, 'بدات كنحس بنقص فالفرحة.'],
+    [50, 'قلبي بدا كيضرب بلا إيقاع. محتاج الرقص.'],
+    [30, 'الدنيا كتدور بيا. أسية، فين رقصتك؟'],
+    [10, 'قولو لماما راني كنبغيها. وقولو لأسية بغيت غير رقصة وحدة.'],
+    [1, 'آخر نفس... رقصي دابا.'],
+    [0, 'تقاضات. ولكن إيلا رقصتي كنرجع.']
+  ];
+  function statusFor(v) { for (var i = 0; i < steps.length; i++) { if (v >= steps[i][0]) return steps[i][1]; } return steps[steps.length - 1][1]; }
+
+  function render() {
+    var v = Math.round(life);
+    $('pct').textContent = v;
+    $('fill').style.width = v + '%';
+    $('lifebar').setAttribute('aria-valuenow', v);
+    $('pfill').style.width = Math.min(100, secs / GOAL * 100) + '%';
+    $('secs').textContent = Math.floor(secs) + ' / ' + GOAL;
+    panel.classList.toggle('low', v < 30 && !done);
+    stage.classList.toggle('gone', v === 0 && !dancing && !done);
+    stage.classList.toggle('on', dancing || done);
+    btn.classList.toggle('pulse', !dancing && !done && v < 60);
+    if (done) { $('status').textContent = 'الروح رجعات 100%.'; tag.textContent = 'الحفل سالا. براڤو أسية'; }
+    else if (dancing) { $('status').textContent = 'كتزيدي فيا الحياة. ماتوقفيش.'; tag.textContent = 'أسية كترقص'; }
+    else { $('status').textContent = statusFor(v); tag.textContent = 'المسرح خاوي، كيتسنى أسية'; }
+    btn.textContent = dancing ? 'كمّلي، ماتوقفيش' : (secs > 0 ? 'رجعي للرقص' : 'رقصي دابا');
+    btn.setAttribute('aria-pressed', dancing ? 'true' : 'false');
+    btn.hidden = done;
+    $('win').hidden = !done;
+  }
+
+  function heart() {
+    var s = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    s.setAttribute('viewBox', '0 0 24 24'); s.setAttribute('class', 'heart');
+    var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    p.setAttribute('d', 'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z');
+    s.appendChild(p);
+    s.style.left = (15 + Math.random() * 70) + '%';
+    s.style.bottom = (30 + Math.random() * 25) + '%';
+    stage.appendChild(s);
+    setTimeout(function () { if (s.parentNode) s.parentNode.removeChild(s); }, 2100);
+  }
+
+  /* beat */
+  var ac = null, timer = null, step = 0, noiseBuf = null;
+  function ensureAudio() {
+    if (ac) return true;
+    try {
+      ac = new (window.AudioContext || window.webkitAudioContext)();
+      noiseBuf = ac.createBuffer(1, ac.sampleRate * 0.3, ac.sampleRate);
+      var d = noiseBuf.getChannelData(0);
+      for (var i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+      return true;
+    } catch (e) { ac = null; return false; }
+  }
+  function kick(t) {
+    var o = ac.createOscillator(), g = ac.createGain();
+    o.frequency.setValueAtTime(160, t); o.frequency.exponentialRampToValueAtTime(45, t + 0.15);
+    g.gain.setValueAtTime(0.6, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+    o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + 0.28);
+  }
+  function noise(t, type, freq, vol, len) {
+    var s = ac.createBufferSource(), f = ac.createBiquadFilter(), g = ac.createGain();
+    s.buffer = noiseBuf; f.type = type; f.frequency.value = freq;
+    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.001, t + len);
+    s.connect(f); f.connect(g); g.connect(ac.destination); s.start(t); s.stop(t + len + 0.02);
+  }
+  function hit(i) {
+    var t = ac.currentTime + 0.02;
+    if (i === 0 || i === 3 || i === 5) kick(t);
+    if (i === 2 || i === 6) noise(t, 'bandpass', 1600, 0.3, 0.14);
+    noise(t, 'highpass', 7000, 0.07, 0.05);
+  }
+  function startBeat() {
+    if ($('mute').checked || !ensureAudio()) return;
+    try { ac.resume(); } catch (e) {}
+    clearInterval(timer); step = 0;
+    timer = setInterval(function () { hit(step % 8); step++; }, 260);
+  }
+  function stopBeat() { clearInterval(timer); }
+
+  function setDancing(on) {
+    dancing = on;
+    if (on) startBeat(); else stopBeat();
+    render();
+  }
+
+  btn.addEventListener('click', function () { if (!done) setDancing(!dancing); });
+  $('mute').addEventListener('change', function () { if ($('mute').checked) stopBeat(); else if (dancing) startBeat(); });
+  $('again').addEventListener('click', function () { done = false; secs = 0; life = 100; dancing = false; render(); });
+
+  setInterval(function () {
+    if (done) { heart(); return; }
+    if (dancing) {
+      secs += 0.5; life = Math.min(100, life + 3); heart();
+      if (secs >= GOAL) { done = true; dancing = false; life = 100; stopBeat(); heart(); heart(); }
+    } else {
+      life = Math.max(0, life - 1);
+    }
+    render();
+  }, 500);
+
+  render();
+})();
+</script>
+
+</body></html>
